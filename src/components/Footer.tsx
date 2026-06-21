@@ -10,9 +10,10 @@ export default function Footer() {
           <Image
             src="/logo.png"
             alt="Wave Logo"
-            width={40}
-            height={20}
-            className="h-5 w-auto object-contain brightness-0 invert"
+            width={80}
+            height={40}
+            className="h-8 w-auto object-contain"
+            style={{ filter: 'brightness(0) invert(1)' }}
           />
           <span className="font-display text-lg font-bold tracking-wider">Wave</span>
         </div>

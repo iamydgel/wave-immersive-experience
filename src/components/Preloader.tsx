@@ -86,13 +86,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     >
       <div className="flex flex-col items-center justify-center gap-8">
         {/* Nouveau Logo PNG Wave */}
-        <div ref={logoRef} className="relative w-32 h-16 flex items-center justify-center">
+        <div ref={logoRef} className="relative w-48 h-24 flex items-center justify-center">
           <Image
             src="/logo.png"
             alt="Wave Logo"
-            width={128}
-            height={64}
-            className="object-contain w-auto h-12"
+            width={256}
+            height={128}
+            className="object-contain w-auto h-20"
             priority
           />
         </div>

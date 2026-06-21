@@ -150,9 +150,9 @@ export default function Hero({ isLoaded }: HeroProps) {
           <Image
             src="/logo.png"
             alt="Wave Logo"
-            width={48}
-            height={24}
-            className="h-6 w-auto object-contain"
+            width={96}
+            height={48}
+            className="h-10 w-auto object-contain"
           />
           <span className="font-display text-xl font-bold tracking-wider text-foam">Wave</span>
         </div>
