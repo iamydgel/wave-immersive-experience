@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
 import { supportsWebGL } from '@/utils/webgl-detect';
 
 const vertexShader = `
