@@ -3,103 +3,96 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Landmark, ArrowRightLeft, Lightbulb, Smartphone, Headphones, Shield } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+interface FeatureCard {
+  id: string;
+  title: string;
+  icon: any;
+  iconColor: string;
+}
+
+const featuresData: FeatureCard[] = [
+  {
+    id: 'deposit',
+    title: 'Un compte sans frais de dépôt ou retrait',
+    icon: Landmark,
+    iconColor: '#0057FF',
+  },
+  {
+    id: 'transfer',
+    title: 'Des transferts d\'argent à seulement 0,5%',
+    icon: ArrowRightLeft,
+    iconColor: '#2ECC71',
+  },
+  {
+    id: 'bills',
+    title: 'Le paiement de factures sans frais',
+    icon: Lightbulb,
+    iconColor: '#E67E22',
+  },
+  {
+    id: 'credit',
+    title: 'L\'achat de crédit instantané tous réseaux',
+    icon: Smartphone,
+    iconColor: '#0057FF',
+  },
+  {
+    id: 'contact',
+    title: 'Un numéro de contact unique et gratuit',
+    icon: Headphones,
+    iconColor: '#2ECC71',
+  },
+  {
+    id: 'security',
+    title: 'Un système de sécurité aux standards internationaux',
+    icon: Shield,
+    iconColor: '#E67E22',
+  },
+];
+
 export default function Features() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const phoneRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    const phone = phoneRef.current;
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 1. Timeline principale de Scroll et Pin
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          scrub: 1.5, // Fort lissage pour un effet liquide
-          start: 'top top',
-          end: '+=200%',
-          anticipatePin: 1,
-        },
-      });
-
-      // Transition Feature 1 → Feature 2 (à 25%)
-      tl
-        // Textes
-        .to('.feature-text-1', { opacity: 0, y: -24, duration: 0.2 }, 0.25)
-        .fromTo('.feature-text-2', 
-          { opacity: 0, y: 24 }, 
-          { opacity: 1, y: 0, duration: 0.2 }, 
-          0.25
-        )
-        // Écrans téléphone (avec rack focus / blur)
-        .to('.phone-screen-1', { opacity: 0, scale: 0.96, filter: 'blur(4px)', duration: 0.2 }, 0.25)
-        .fromTo('.phone-screen-2',
-          { opacity: 0, scale: 1.04, filter: 'blur(4px)' },
-          { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.2 },
-          0.25
-        )
-        // Indicateurs dots
-        .to('.progress-dot-1', { backgroundColor: 'rgba(255,255,255,0.2)', scale: 1, duration: 0.1 }, 0.25)
-        .to('.progress-dot-2', { backgroundColor: '#0057FF', scale: 1.3, duration: 0.1 }, 0.25);
-
-      // Transition Feature 2 → Feature 3 (à 58%)
-      tl
-        // Textes
-        .to('.feature-text-2', { opacity: 0, y: -24, duration: 0.2 }, 0.58)
-        .fromTo('.feature-text-3', 
-          { opacity: 0, y: 24 }, 
-          { opacity: 1, y: 0, duration: 0.2 }, 
-          0.58
-        )
-        // Écrans téléphone
-        .to('.phone-screen-2', { opacity: 0, scale: 0.96, filter: 'blur(4px)', duration: 0.2 }, 0.58)
-        .fromTo('.phone-screen-3',
-          { opacity: 0, scale: 1.04, filter: 'blur(4px)' },
-          { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 0.2 },
-          0.58
-        )
-        // Indicateurs dots
-        .to('.progress-dot-2', { backgroundColor: 'rgba(255,255,255,0.2)', scale: 1, duration: 0.1 }, 0.58)
-        .to('.progress-dot-3', { backgroundColor: '#0057FF', scale: 1.3, duration: 0.1 }, 0.58);
-
-      // 2. Barre de progression globale
-      gsap.fromTo('.features-progress-fill',
-        { scaleX: 0 },
+      // Animation d'entrée pour le titre
+      gsap.fromTo('.features-header',
+        { opacity: 0, y: 40 },
         {
-          scaleX: 1,
-          transformOrigin: 'left center',
-          ease: 'none',
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: section,
-            start: 'top top',
-            end: '+=200%',
-            scrub: true,
+            start: 'top 75%',
+            once: true,
           },
         }
       );
 
-      // 3. Effet d'inclinaison 3D du téléphone au mouvement de la souris (Tilt)
-      if (phone) {
-        const onMouseMove = (e: MouseEvent) => {
-          const rx = (e.clientY / window.innerHeight - 0.5) * -8;
-          const ry = (e.clientX / window.innerWidth - 0.5) * 12;
-          gsap.to(phone, {
-            rotateX: rx,
-            rotateY: ry,
-            duration: 1.2,
-            ease: 'power1.out',
-            transformPerspective: 1000,
-          });
-        };
-        window.addEventListener('mousemove', onMouseMove);
-        return () => window.removeEventListener('mousemove', onMouseMove);
-      }
+      // Animation d'entrée pour la grille (staggered)
+      gsap.fromTo('.feature-grid-card',
+        { opacity: 0, y: 50 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: '.features-grid',
+            start: 'top 80%',
+            once: true,
+          },
+        }
+      );
     }, section);
 
     return () => ctx.revert();
@@ -108,113 +101,52 @@ export default function Features() {
   return (
     <section
       ref={sectionRef}
-      className="features-section relative flex h-screen w-full flex-col justify-center overflow-hidden bg-deep-ocean px-6 md:px-16"
-      aria-label="Fonctionnalités de Wave"
+      id="features"
+      className="relative flex min-h-screen w-full flex-col justify-center bg-foam px-6 py-24 md:px-16 text-earth overflow-hidden"
+      aria-label="Pourquoi choisir Wave"
     >
-      {/* Top Indicators & Bar */}
-      <div className="absolute top-12 left-1/2 z-10 w-full max-w-xs -translate-x-1/2 flex flex-col items-center gap-4">
-        <div className="flex gap-6">
-          <div className="progress-dot-1 h-3.5 w-3.5 rounded-full bg-wave-blue scale-130 transition-all duration-300" />
-          <div className="progress-dot-2 h-3.5 w-3.5 rounded-full bg-white/20 transition-all duration-300" />
-          <div className="progress-dot-3 h-3.5 w-3.5 rounded-full bg-white/20 transition-all duration-300" />
-        </div>
-        <div className="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
-          <div className="features-progress-fill h-full w-full bg-wave-blue scale-x-0" />
-        </div>
-      </div>
+      {/* Background painted curves simulation */}
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full border-[24px] border-wave-blue/10 pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full border-[24px] border-aqua-light/10 pointer-events-none" />
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-2">
-        {/* Left Side: Story / Text */}
-        <div className="relative h-64 md:h-80 flex items-center">
-          {/* Feature 1 */}
-          <div className="feature-text-1 absolute w-full flex flex-col gap-4 text-left">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-wave-blue">Étape 01</span>
-            <h2 className="font-display text-4xl font-black text-foam md:text-5xl">Sécurité de niveau bancaire</h2>
-            <p className="font-body text-base text-foam/75 md:text-lg max-w-md">
-              Chaque transaction est protégée par un chiffrement de bout en bout avancé. Wave assure une conformité réglementaire totale pour votre paix d'esprit.
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="feature-text-2 absolute w-full flex flex-col gap-4 text-left opacity-0 translate-y-6">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-wave-blue">Étape 02</span>
-            <h2 className="font-display text-4xl font-black text-foam md:text-5xl">Tarifs honnêtes et transparents</h2>
-            <p className="font-body text-base text-foam/75 md:text-lg max-w-md">
-              Fini les frais cachés. Seulement 0,5% de frais d'envoi. Les dépôts et retraits restent totalement gratuits et sans mauvaise surprise.
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="feature-text-3 absolute w-full flex flex-col gap-4 text-left opacity-0 translate-y-6">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-wave-blue">Étape 03</span>
-            <h2 className="font-display text-4xl font-black text-foam md:text-5xl">Simplicité d'utilisation</h2>
-            <p className="font-body text-base text-foam/75 md:text-lg max-w-md">
-              Une interface épurée conçue pour les utilisateurs. Envoyez de l'argent à vos proches en quelques secondes, peu importe où ils se trouvent.
-            </p>
-          </div>
+      <div className="mx-auto w-full max-w-6xl z-10">
+        {/* Title */}
+        <div className="features-header text-center mb-16 flex flex-col gap-3">
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-wave-blue">Avantages</span>
+          <h2 className="font-display text-4xl font-black text-deep-ocean md:text-5xl">Wave c'est</h2>
         </div>
 
-        {/* Right Side: 3D phone mockup */}
-        <div className="flex justify-center md:justify-end">
-          <div
-            ref={phoneRef}
-            className="phone-mockup relative h-[420px] w-[210px] md:h-[500px] md:w-[250px] rounded-[36px] border-[6px] border-white/10 bg-black/60 shadow-2xl backdrop-blur-md will-change-transform flex items-center justify-center overflow-hidden"
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            {/* Phone notch */}
-            <div className="absolute top-3 z-30 h-4 w-28 rounded-full bg-black" />
-
-            {/* Screen 1 */}
-            <div className="phone-screen-1 absolute inset-0 z-10 flex flex-col justify-between p-6 bg-gradient-to-b from-[#001030] to-[#002050]">
-              <div className="mt-8 flex flex-col items-center text-center gap-4">
-                <div className="h-14 w-14 rounded-full bg-wave-blue/20 flex items-center justify-center border border-wave-blue/40">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057FF" strokeWidth="2">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                  </svg>
+        {/* 2x3 Grid */}
+        <div className="features-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuresData.map((feature) => {
+            const IconComponent = feature.icon;
+            return (
+              <div
+                key={feature.id}
+                className="feature-grid-card group rounded-2xl bg-white border border-deep-ocean/5 p-8 flex flex-col justify-between min-h-[220px] transition-all duration-300 hover:shadow-xl hover:shadow-deep-ocean/5 hover:-translate-y-1"
+                data-cursor="card"
+              >
+                {/* Lucide animated icon container */}
+                <div
+                  className="h-16 w-16 rounded-xl flex items-center justify-center border transition-all duration-300"
+                  style={{
+                    backgroundColor: `${feature.iconColor}15`,
+                    borderColor: `${feature.iconColor}30`,
+                  }}
+                >
+                  <IconComponent
+                    size={32}
+                    style={{ color: feature.iconColor }}
+                    className="transition-transform duration-500 ease-out group-hover:scale-110 group-hover:rotate-12"
+                  />
                 </div>
-                <h3 className="font-display text-lg font-bold text-foam">Coffre Fort</h3>
-                <p className="font-body text-xs text-foam/60">Chiffrement AES-256 activé et sécurisé.</p>
-              </div>
-              <div className="w-full h-8 rounded-lg bg-wave-blue flex items-center justify-center font-body text-xs font-bold text-white shadow-md">
-                Données Sécurisées
-              </div>
-            </div>
 
-            {/* Screen 2 */}
-            <div className="phone-screen-2 absolute inset-0 z-10 flex flex-col justify-between p-6 bg-gradient-to-b from-[#001030] to-[#002050] opacity-0 scale-104 filter blur-[4px]">
-              <div className="mt-8 flex flex-col items-center text-center gap-4">
-                <div className="h-14 w-14 rounded-full bg-[#2ECC71]/20 flex items-center justify-center border border-[#2ECC71]/40">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2ECC71" strokeWidth="2">
-                    <line x1="12" y1="1" x2="12" y2="23"/>
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                  </svg>
-                </div>
-                <h3 className="font-display text-lg font-bold text-foam">Frais Réduits</h3>
-                <p className="font-body text-xs text-foam/60">Seulement 0.5% prélevés sur vos envois.</p>
+                <h3 className="font-display text-lg font-bold text-deep-ocean leading-snug mt-6">
+                  {feature.title}
+                </h3>
               </div>
-              <div className="w-full h-8 rounded-lg bg-[#2ECC71] flex items-center justify-center font-body text-xs font-bold text-white shadow-md">
-                Économies Garanties
-              </div>
-            </div>
-
-            {/* Screen 3 */}
-            <div className="phone-screen-3 absolute inset-0 z-10 flex flex-col justify-between p-6 bg-gradient-to-b from-[#001030] to-[#002050] opacity-0 scale-104 filter blur-[4px]">
-              <div className="mt-8 flex flex-col items-center text-center gap-4">
-                <div className="h-14 w-14 rounded-full bg-wave-blue/20 flex items-center justify-center border border-wave-blue/40">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0057FF" strokeWidth="2">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
-                </div>
-                <h3 className="font-display text-lg font-bold text-foam">Transfert Rapide</h3>
-                <p className="font-body text-xs text-foam/60">Envoyez de l'argent instantanément.</p>
-              </div>
-              <div className="w-full h-8 rounded-lg bg-wave-blue flex items-center justify-center font-body text-xs font-bold text-white shadow-md">
-                Envoyer maintenant
-              </div>
-            </div>
-
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>
