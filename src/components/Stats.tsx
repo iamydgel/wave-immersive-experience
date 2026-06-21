@@ -58,15 +58,15 @@ export default function Stats() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // 1. Entrée des cartes de stats
-      gsap.fromTo('.stat-card',
-        { opacity: 0, y: 60 },
+      // 1. Entrée du header et des cartes de stats
+      gsap.fromTo('.stat-animate',
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
           duration: 0.8,
           ease: 'power3.out', // = $ease-luxury
-          stagger: 0.12, // = $delay-loose
+          stagger: 0.1, // = $delay-loose
           scrollTrigger: {
             trigger: section,
             start: 'top 75%',
@@ -90,7 +90,7 @@ export default function Stats() {
             gsap.to(proxy, {
               val: target,
               duration,
-              delay,
+              delay: delay + 0.2, // Légèrement décalé après le reveal de la carte
               ease: 'power2.out',
               onUpdate() {
                 let display = '';
@@ -149,11 +149,20 @@ export default function Stats() {
     <section
       id="stats"
       ref={sectionRef}
-      className="relative flex min-h-[60vh] w-full flex-col justify-center bg-deep-ocean px-6 py-24 md:px-16"
+      className="relative flex min-h-[70vh] w-full flex-col justify-center bg-deep-ocean px-6 py-24 md:px-16"
       aria-label="Statistiques clés Wave"
     >
-      <div className="mx-auto w-full max-w-6xl">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className="mx-auto w-full max-w-5xl space-y-12 md:space-y-16">
+        {/* Header de section style Tailark */}
+        <div className="stat-animate relative z-10 mx-auto max-w-xl space-y-4 text-center">
+          <h2 className="font-display text-4xl font-bold lg:text-5xl text-foam">Wave en chiffres</h2>
+          <p className="font-body text-sm text-foam/60">
+            La simplicité et les tarifs les plus bas du marché, adoptés par des millions d'utilisateurs au quotidien.
+          </p>
+        </div>
+
+        {/* Grille style tailark-stats-3 */}
+        <div className="grid gap-4 md:gap-0.5 *:text-center md:grid-cols-3">
           {statsData.map((stat, index) => {
             const positionClass =
               index === 0
@@ -164,7 +173,7 @@ export default function Stats() {
             return (
               <div
                 key={stat.id}
-                className={`stat-card ${positionClass} rounded-2xl border border-white/8 bg-white/4 p-8 text-center backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(0,87,255,0.15)]`}
+                className={`stat-animate stat-card ${positionClass} rounded-2xl border border-white/10 bg-white/4 py-12 px-6 backdrop-blur-md transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(0,87,255,0.15)] flex flex-col items-center justify-center space-y-4`}
                 data-cursor="card"
               >
                 <div
@@ -172,7 +181,7 @@ export default function Stats() {
                 >
                   {stat.prefix}0{stat.suffix}
                 </div>
-                <div className="mt-4 font-body text-sm font-semibold uppercase tracking-wider text-foam/60">
+                <div className="font-body text-sm font-semibold uppercase tracking-wider text-foam/60">
                   {stat.label}
                 </div>
               </div>
