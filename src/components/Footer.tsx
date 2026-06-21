@@ -1,4 +1,4 @@
-'use client';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -6,9 +6,14 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Left branding */}
         <div className="flex items-center gap-2">
-          <svg width="32" height="20" viewBox="0 0 40 24" fill="none" className="h-5 w-auto">
-            <path d="M4,12 C10,4 18,20 24,12 C30,4 36,20 36,12" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round"/>
-          </svg>
+          {/* Wave Logo PNG */}
+          <Image
+            src="/logo.png"
+            alt="Wave Logo"
+            width={40}
+            height={20}
+            className="h-5 w-auto object-contain brightness-0 invert"
+          />
           <span className="font-display text-lg font-bold tracking-wider">Wave</span>
         </div>
 

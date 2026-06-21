@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import Image from 'next/image';
 
 interface PreloaderProps {
   onComplete: () => void;
@@ -9,25 +10,20 @@ interface PreloaderProps {
 
 export default function Preloader({ onComplete }: PreloaderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const logoPathRef = useRef<SVGPathElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLDivElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    const logoPath = logoPathRef.current;
+    const logo = logoRef.current;
     const counter = counterRef.current;
     const progressBar = progressBarRef.current;
 
-    if (!container || !logoPath || !counter || !progressBar) return;
+    if (!container || !logo || !counter || !progressBar) return;
 
-    // Préparer le tracé SVG pour l'effet de tracé de ligne (stroke drawing)
-    const pathLength = logoPath.getTotalLength();
-    gsap.set(logoPath, {
-      strokeDasharray: pathLength,
-      strokeDashoffset: pathLength,
-      opacity: 1,
-    });
+    // Masquer le logo au départ pour l'animation d'entrée
+    gsap.set(logo, { opacity: 0, scale: 0.8 });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -36,11 +32,12 @@ export default function Preloader({ onComplete }: PreloaderProps) {
     });
 
     tl
-      // Dessiner le logo SVG
-      .to(logoPath, {
-        strokeDashoffset: 0,
+      // Faire apparaître le logo PNG avec rebond
+      .to(logo, {
+        opacity: 1,
+        scale: 1,
         duration: 0.6,
-        ease: 'power3.out', // = $ease-luxury
+        ease: 'back.out(1.7)', // = $ease-luxury
       }, 0.2)
 
       // Compteur de progression de 00 à 100 avec incréments irréguliers
@@ -88,25 +85,17 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       className="loader-wrapper fixed inset-0 z-50 flex flex-col items-center justify-center bg-deep-ocean select-none"
     >
       <div className="flex flex-col items-center justify-center gap-8">
-        {/* Logo Wave (Stylisé en SVG Wave path) */}
-        <svg
-          width="120"
-          height="60"
-          viewBox="0 0 120 60"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-[120px] h-[60px]"
-        >
-          <path
-            ref={logoPathRef}
-            className="logo-path"
-            d="M10,30 C30,10 50,50 70,30 C90,10 110,50 110,30"
-            stroke="#0057FF"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {/* Nouveau Logo PNG Wave */}
+        <div ref={logoRef} className="relative w-32 h-16 flex items-center justify-center">
+          <Image
+            src="/logo.png"
+            alt="Wave Logo"
+            width={128}
+            height={64}
+            className="object-contain w-auto h-12"
+            priority
           />
-        </svg>
+        </div>
 
         {/* Compteur % */}
         <div

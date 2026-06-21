@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import Image from 'next/image';
 import WebGLWave from './WebGLWave';
 
 interface HeroProps {
@@ -145,10 +146,14 @@ export default function Hero({ isLoaded }: HeroProps) {
       {/* Navigation Header */}
       <header ref={containerRef} className="z-10 flex w-full items-center justify-between">
         <div className="nav-item flex items-center gap-2">
-          {/* Wave Logo */}
-          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" className="h-6 w-auto">
-            <path d="M4,12 C10,4 18,20 24,12 C30,4 36,20 36,12" stroke="#0057FF" strokeWidth="4" strokeLinecap="round"/>
-          </svg>
+          {/* Wave Logo PNG */}
+          <Image
+            src="/logo.png"
+            alt="Wave Logo"
+            width={48}
+            height={24}
+            className="h-6 w-auto object-contain"
+          />
           <span className="font-display text-xl font-bold tracking-wider text-foam">Wave</span>
         </div>
         <nav className="hidden items-center gap-8 md:flex">
