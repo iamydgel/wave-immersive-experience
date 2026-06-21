@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { PlayStoreButton } from '@/components/ui/play-store-button';
 
 export default function Footer() {
   const [langOpen, setLangOpen] = useState(false);
@@ -110,25 +111,14 @@ export default function Footer() {
             </a>
 
             {/* Google Play */}
-            <a
-              href="#"
-              className="flex items-center gap-3 rounded-xl bg-black/40 px-4 py-2 border border-white/10 hover:border-white/30 transition-all select-none"
+            <PlayStoreButton
+              asChild
+              className="flex items-center gap-3 rounded-xl bg-black/40 px-4 py-2 border border-white/10 hover:border-white/30 transition-all select-none text-white hover:bg-black/60 hover:text-white h-auto"
               data-cursor="cta"
               data-cursor-text="Google"
             >
-              <svg width="20" height="20" viewBox="0 0 466 512" fill="currentColor" className="text-white h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }}>
-                <g fillRule="nonzero">
-                  <path d="M199.9 237.8 1.4 470.17c7.22 24.57 30.16 41.81 55.8 41.81 11.16 0 20.93-2.79 29.3-8.37l244.16-139.46L199.9 237.8z"/>
-                  <path d="m433.91 205.1-104.65-60-111.61 110.22 113.01 108.83 104.64-58.6c18.14-9.77 30.7-29.3 30.7-50.23-1.4-20.93-13.95-40.46-32.09-50.22z"/>
-                  <path d="M199.42 273.45 329.27 145.1 87.9 8.37C79.53 2.79 68.36 0 57.2 0 30.7 0 6.98 18.14 1.4 41.86l198.02 231.59z"/>
-                  <path d="M1.39 41.86C0 46.04 0 51.63 0 57.2v397.64c0 5.57 0 9.76 1.4 15.34l216.27-214.86L1.39 41.86z"/>
-                </g>
-              </svg>
-              <div className="text-left leading-none">
-                <div className="text-[8px] text-white/50">DISPONIBLE SUR</div>
-                <div className="text-xs font-bold text-white font-body mt-0.5">Google Play</div>
-              </div>
-            </a>
+              <a href="#" />
+            </PlayStoreButton>
           </div>
         </div>
       </div>
