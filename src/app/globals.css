@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
+/* Font definitions with local/system fallbacks */
+@font-face {
+  font-family: 'Clash Display';
+  src: local('Clash Display'), local('ClashDisplay-Bold'), system-ui, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi'), local('Satoshi-Regular'), system-ui, sans-serif;
+  font-weight: 400 500;
+  font-style: normal;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Wave Color Palette (Water & Earth) */
+  --c-wave-blue: #0057FF;
+  --c-deep-ocean: #001A4D;
+  --c-aqua-light: #5DADE2;
+  --c-foam: #EAF4FF;
+  --c-sand: #F5EFE6;
+  --c-earth: #3D2B1F;
+  --c-success: #2ECC71;
+  --c-alert: #E67E22;
+
+  --c-wave-blue-10: rgba(0, 87, 255, 0.10);
+  --c-deep-ocean-80: rgba(0, 26, 77, 0.80);
+
+  /* Fonts */
+  --font-display: 'Clash Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Satoshi', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Spacing */
+  --space-unit: 8px;
+  --space-xs: calc(var(--space-unit) * 1);
+  --space-sm: calc(var(--space-unit) * 2);
+  --space-md: calc(var(--space-unit) * 3);
+  --space-lg: calc(var(--space-unit) * 5);
+  --space-xl: calc(var(--space-unit) * 8);
+  --space-2xl: calc(var(--space-unit) * 13);
+  --grid-gutter: clamp(16px, 3vw, 32px);
+  --max-width: 1440px;
+
+  /* Motion tokens */
+  --dur-xs: 80ms;
+  --dur-s: 200ms;
+  --dur-m: 480ms;
+  --dur-l: 800ms;
+  --dur-xl: 1200ms;
+  --dur-cinematic: 1800ms;
+
+  --ease-water: cubic-bezier(.05, .9, .25, 1);
+  --ease-luxury: cubic-bezier(.22, .9, .35, 1);
+  --ease-flow: cubic-bezier(.4, 0, .2, 1);
+  --ease-gravity: cubic-bezier(.4, 0, 1, 1);
+  --ease-emerge: cubic-bezier(.2, 1, .3, 1);
+  --ease-sharp: cubic-bezier(.4, 0, .6, 0);
+
+  /* Next.js default overrides */
+  --background: var(--c-deep-ocean);
+  --foreground: var(--c-foam);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-wave-blue: var(--c-wave-blue);
+  --color-deep-ocean: var(--c-deep-ocean);
+  --color-aqua-light: var(--c-aqua-light);
+  --color-foam: var(--c-foam);
+  --color-sand: var(--c-sand);
+  --color-earth: var(--c-earth);
+  --color-success: var(--c-success);
+  --color-alert: var(--c-alert);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background-color: var(--c-deep-ocean);
+  color: var(--c-foam);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--c-deep-ocean);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 87, 255, 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-wave-blue);
+}
+
+/* Custom cursor default hide on touch/mobile devices */
+@media (hover: none) and (pointer: coarse) {
+  .cursor {
+    display: none !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Lenis integration helper */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis-stopped {
+  overflow: hidden;
+}
+.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Wave keyframes for SVG animated wave in CTA */
+@keyframes waveSVG {
+  from {
+    d: path("M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z");
+  }
+  to {
+    d: path("M0,40 C240,0 480,100 720,40 C960,0 1200,100 1440,40 L1440,120 L0,120 Z");
+  }
+}
+
+.wave-path {
+  fill: var(--c-wave-blue);
+  animation: waveSVG 4s ease-in-out infinite alternate;
+}
+
+/* Reduced motion fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .wave-canvas {
+    display: none !important;
+  }
+
+  .wave-fallback-img {
+    display: block !important;
+  }
 }
