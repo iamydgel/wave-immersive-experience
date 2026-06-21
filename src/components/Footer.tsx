@@ -1,34 +1,130 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 
 export default function Footer() {
+  const [langOpen, setLangOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('Français');
+
+  const toggleLang = () => setLangOpen(!langOpen);
+  const selectLang = (lang: string) => {
+    setCurrentLang(lang);
+    setLangOpen(false);
+  };
+
   return (
-    <footer className="w-full bg-wave-blue px-6 py-12 md:px-16 text-white border-t border-white/10">
-      <div className="mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
-        {/* Left branding */}
-        <div className="flex items-center gap-2">
-          {/* Wave Logo PNG */}
-          <Image
-            src="/logo.png"
-            alt="Wave Logo"
-            width={80}
-            height={40}
-            className="h-8 w-auto object-contain"
-            style={{ filter: 'brightness(0) invert(1)' }}
-          />
-          <span className="font-display text-lg font-bold tracking-wider">Wave</span>
+    <footer className="w-full bg-deep-ocean px-6 py-20 md:px-16 text-foam border-t border-white/10 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute -bottom-16 -right-16 w-64 h-64 rounded-full border-[12px] border-wave-blue/5 pointer-events-none" />
+
+      <div className="mx-auto max-w-6xl grid grid-cols-1 md:grid-cols-4 gap-12 items-start z-10 relative">
+        {/* Column 1: Branding & Language */}
+        <div className="flex flex-col gap-6 items-start text-left">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="Wave Logo"
+              width={96}
+              height={48}
+              className="h-10 w-auto object-contain"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
+            <span className="font-display text-xl font-bold tracking-wider">Wave</span>
+          </div>
+
+          {/* Interactive Language Selector */}
+          <div className="relative">
+            <button
+              onClick={toggleLang}
+              className="flex items-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/5 transition-all select-none"
+              data-cursor="link"
+            >
+              <span>{currentLang}</span>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className={`h-4 w-4 transition-transform duration-200 ${langOpen ? 'rotate-180' : ''}`}
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
+            {langOpen && (
+              <div className="absolute bottom-full left-0 mb-2 w-32 rounded-xl border border-white/10 bg-deep-ocean p-2 shadow-2xl z-20 flex flex-col gap-1">
+                <button onClick={() => selectLang('Français')} className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/5">Français</button>
+                <button onClick={() => selectLang('English')} className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/5">English</button>
+                <button onClick={() => selectLang('Wolof')} className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-white/5">Wolof</button>
+              </div>
+            )}
+          </div>
+
+          <div className="text-[11px] text-foam/40 font-mono">
+            © {new Date().getFullYear()} Wave Mobile Money Inc.
+          </div>
         </div>
 
-        {/* Center links */}
-        <div className="flex gap-6 text-sm font-body font-medium text-white/80">
-          <a href="#stats" className="hover:text-white" data-cursor="link">Tarifs</a>
-          <a href="#features" className="hover:text-white" data-cursor="link">Fonctionnalités</a>
-          <a href="#transfer" className="hover:text-white" data-cursor="link">Démonstration</a>
-          <a href="#testimonials" className="hover:text-white" data-cursor="link">Avis</a>
+        {/* Column 2: L'entreprise */}
+        <div className="flex flex-col gap-4 items-start text-left">
+          <h3 className="font-display text-sm font-bold uppercase tracking-wider text-aqua-light">L'entreprise</h3>
+          <ul className="flex flex-col gap-2.5 text-sm font-body text-foam/70">
+            <li><a href="#about" className="hover:text-foam" data-cursor="link">À Propos</a></li>
+            <li><a href="#careers" className="hover:text-foam" data-cursor="link">Carrières</a></li>
+            <li><a href="#blog" className="hover:text-foam" data-cursor="link">Blog</a></li>
+          </ul>
         </div>
 
-        {/* Right copy */}
-        <div className="font-mono text-xs text-white/60">
-          © {new Date().getFullYear()} Wave Immersive Experience. Tous droits réservés.
+        {/* Column 3: Legal Info */}
+        <div className="flex flex-col gap-4 items-start text-left md:col-span-2 lg:col-span-1">
+          <h3 className="font-display text-sm font-bold uppercase tracking-wider text-aqua-light">Informations Légales</h3>
+          <ul className="flex flex-col gap-2.5 text-sm font-body text-foam/70">
+            <li><a href="#" className="hover:text-foam" data-cursor="link">Conditions Générales</a></li>
+            <li><a href="#" className="hover:text-foam" data-cursor="link">Responsible Disclosure</a></li>
+            <li><a href="#" className="hover:text-foam" data-cursor="link">Wave Digital Finance</a></li>
+            <li><a href="#" className="hover:text-foam" data-cursor="link">Avis de Confidentialité</a></li>
+            <li><a href="#" className="hover:text-foam" data-cursor="link">Politique de réclamations</a></li>
+          </ul>
+        </div>
+
+        {/* Column 4: App Badges */}
+        <div className="flex flex-col gap-4 items-start md:items-end text-left md:text-right">
+          <h3 className="font-display text-sm font-bold uppercase tracking-wider text-aqua-light">Téléchargements</h3>
+          <div className="flex flex-col gap-3">
+            {/* App Store */}
+            <a
+              href="#"
+              className="flex items-center gap-3 rounded-xl bg-black/40 px-4 py-2 border border-white/10 hover:border-white/30 transition-all select-none"
+              data-cursor="cta"
+              data-cursor-text="Apple"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-white h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }}>
+                <path d="M18.71,19.5C17.88,20.74,17,21.95,15.66,22c-1.28,0-1.69-.78-3.15-.78s-1.92.76-3.15.78C8,22,7.09,20.72,6.26,19.5,4.56,17,3.26,12.37,5,9.39A4.7,4.7,0,0,1,8.91,7.21c1.23,0,2.38.85,3.13.85s2-.9,3.42-.75a4.41,4.41,0,0,1,3.47,2.44,4.24,4.24,0,0,0-2.55,3.87,4.19,4.19,0,0,0,1.57,3.27A10.82,10.82,0,0,1,18.71,19.5M15.9,4.86a4.2,4.2,0,0,0,1-3,4.23,4.23,0,0,0-2.73,1.4,3.92,3.92,0,0,0-1,2.94A3.59,3.59,0,0,0,15.9,4.86Z"/>
+              </svg>
+              <div className="text-left leading-none">
+                <div className="text-[8px] text-white/50">Télécharger dans</div>
+                <div className="text-xs font-bold text-white font-body mt-0.5">l'App Store</div>
+              </div>
+            </a>
+
+            {/* Google Play */}
+            <a
+              href="#"
+              className="flex items-center gap-3 rounded-xl bg-black/40 px-4 py-2 border border-white/10 hover:border-white/30 transition-all select-none"
+              data-cursor="cta"
+              data-cursor-text="Google"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" className="text-white h-5 w-auto" style={{ filter: 'brightness(0) invert(1)' }}>
+                <path d="M5.00003 3.00003C4.54228 3.00003 4.14815 3.32431 4.02539 3.76611L12.5 12.2408L20.9747 3.76611C20.8519 3.32431 20.4578 3.00003 20 3.00003H5.00003ZM4.00003 5.17065V19.3108C4.00003 19.5932 4.08103 19.8631 4.22559 20.0934L11.5 12.8189L4.00003 5.17065ZM20 20.0934C20.1446 19.8631 20.2256 19.5932 20.2256 19.3108V5.17065L12.7256 12.8189L20 20.0934ZM11.5 14.2333L4.22559 21.5078C4.44432 21.8219 4.80803 22 5.00003 22H20C20.192 22 20.5557 21.8219 20.7744 21.5078L13.5 14.2333L12.5 13.2333L11.5 14.2333Z"/>
+              </svg>
+              <div className="text-left leading-none">
+                <div className="text-[8px] text-white/50">DISPONIBLE SUR</div>
+                <div className="text-xs font-bold text-white font-body mt-0.5">Google Play</div>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
