@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +13,7 @@ interface Testimonial {
   role: string;
   quote: string;
   location: string;
+  image: string;
 }
 
 const testimonialsData: Testimonial[] = [
@@ -21,27 +23,15 @@ const testimonialsData: Testimonial[] = [
     role: 'Commerçante',
     quote: 'Depuis que j\'utilise Wave, je n\'ai plus besoin de faire la queue pour envoyer de l\'argent à mes fournisseurs. C\'est instantané et sans tracas.',
     location: 'Dakar, Sénégal',
+    image: '/client_portrait_fatou.png',
   },
   {
     id: '2',
     name: 'Amadou Diallo',
-    role: 'Développeur Freelance',
-    quote: 'Les frais de 0,5% ont totalement changé ma façon de gérer mes finances. Je peux envoyer de petits montants sans me soucier des frais fixes de transaction.',
+    role: 'Freelance',
+    quote: 'Les frais de 0,5% ont totalement changé ma façon de gérer mes finances. Je peux envoyer de petits montants sans me soucier des frais de transaction.',
     location: 'Bamako, Mali',
-  },
-  {
-    id: '3',
-    name: 'Koffi Mensah',
-    role: 'Entrepreneur Agricole',
-    quote: 'La simplicité de l\'application me permet de payer mes ouvriers agricoles directement sur le terrain, en toute sécurité et sans délai.',
-    location: 'Abidjan, Côte d\'Ivoire',
-  },
-  {
-    id: '4',
-    name: 'Awa Cissé',
-    role: 'Étudiante',
-    quote: 'Mes parents m\'envoient mon argent de poche chaque mois en un clic. Wave est fluide et tellement pratique au quotidien.',
-    location: 'Saint-Louis, Sénégal',
+    image: '/client_portrait_amadou.png',
   },
 ];
 
@@ -55,7 +45,6 @@ export default function Testimonials() {
     if (!container || !track) return;
 
     const ctx = gsap.context(() => {
-      // Défilement horizontal synchronisé sur le défilement vertical
       const scrollWidth = track.scrollWidth;
       const windowWidth = window.innerWidth;
       
@@ -64,7 +53,7 @@ export default function Testimonials() {
         start: 'top top',
         end: () => `+=${scrollWidth - windowWidth + 200}`,
         pin: true,
-        scrub: 0.8, // Valeur fluide
+        scrub: 0.8,
         animation: gsap.to(track, {
           x: () => -(scrollWidth - windowWidth + 100),
           ease: 'none',
@@ -80,34 +69,58 @@ export default function Testimonials() {
     <section
       ref={containerRef}
       id="testimonials"
-      className="testimonials-track relative h-screen w-full overflow-hidden bg-deep-ocean flex flex-col justify-center"
+      className="testimonials-track relative h-screen w-full overflow-hidden bg-[#7B3F00] flex flex-col justify-center"
       aria-label="Témoignages des utilisateurs"
     >
-      <div className="absolute top-16 left-6 md:left-16 z-10 flex flex-col gap-2 text-left">
-        <span className="font-mono text-xs font-bold uppercase tracking-wider text-wave-blue">Témoignages</span>
-        <h2 className="font-display text-4xl font-black text-foam md:text-5xl">Ils font confiance à Wave</h2>
+      {/* Terracotta/Brown header banner */}
+      <div className="absolute top-0 left-0 w-full h-[35%] bg-[#8B4513] z-0 flex flex-col justify-end pb-8 px-6 md:px-16 text-left">
+        <h2 className="font-display text-3xl font-black text-white md:text-5xl">Témoignages de nos clients</h2>
+      </div>
+
+      {/* Hand-drawn yellow stripes simulation in background */}
+      <div className="absolute right-10 top-1/4 h-2/3 w-[300px] pointer-events-none opacity-20 z-0">
+        <svg viewBox="0 0 200 400" className="w-full h-full text-yellow-500 fill-current">
+          <path d="M10,10 Q40,90 20,180 T10,350" stroke="currentColor" strokeWidth="12" fill="none" strokeLinecap="round"/>
+          <path d="M40,20 Q70,100 50,190 T40,360" stroke="currentColor" strokeWidth="12" fill="none" strokeLinecap="round"/>
+          <path d="M70,30 Q100,110 80,200 T70,370" stroke="currentColor" strokeWidth="12" fill="none" strokeLinecap="round"/>
+          <path d="M100,40 Q130,120 110,210 T100,380" stroke="currentColor" strokeWidth="12" fill="none" strokeLinecap="round"/>
+        </svg>
       </div>
 
       <div
         ref={trackRef}
-        className="testimonials-inner flex gap-8 px-6 md:px-16 mt-20 w-max items-center justify-start py-8"
+        className="testimonials-inner flex gap-12 px-6 md:px-16 mt-28 w-max items-center justify-start py-8 z-10"
         style={{ willChange: 'transform' }}
       >
         {testimonialsData.map((t) => (
           <div
             key={t.id}
-            className="w-[300px] md:w-[400px] shrink-0 rounded-2xl border border-white/8 bg-wave-blue/5 p-8 backdrop-blur-md transition-all duration-300 hover:border-wave-blue/40 hover:bg-wave-blue/10 flex flex-col justify-between h-[250px] md:h-[280px] text-left"
+            className="w-[450px] md:w-[600px] shrink-0 rounded-3xl bg-[#F5EFE6] border border-deep-ocean/5 p-8 shadow-xl flex flex-col md:flex-row gap-6 items-center justify-between text-earth hover:shadow-2xl transition-all duration-300"
             data-cursor="card"
           >
-            <p className="font-body text-base md:text-lg italic text-foam/90 leading-relaxed">
-              “ {t.quote} ”
-            </p>
-            <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-4">
-              <div>
-                <h3 className="font-display text-sm md:text-base font-bold text-foam">{t.name}</h3>
-                <p className="font-body text-xs text-foam/50">{t.role}</p>
+            {/* Customer Photo */}
+            <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shrink-0 border-4 border-white shadow-md">
+              <Image
+                src={t.image}
+                alt={t.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* Testimonial Quote */}
+            <div className="flex flex-col justify-between flex-1 text-left h-full">
+              <span className="text-4xl font-serif text-[#8B4513]/40 leading-none">“</span>
+              <p className="font-body text-sm md:text-base italic text-[#3D2B1F]/90 leading-relaxed -mt-2">
+                {t.quote}
+              </p>
+              <div className="border-t border-earth/10 pt-3 mt-4 flex items-center justify-between">
+                <div>
+                  <h3 className="font-display text-sm md:text-base font-bold text-deep-ocean">{t.name}</h3>
+                  <p className="font-body text-[10px] uppercase font-semibold text-[#8B4513]">{t.role}</p>
+                </div>
+                <span className="font-body text-xs font-semibold text-wave-blue">{t.location}</span>
               </div>
-              <span className="font-body text-xs font-semibold text-wave-blue">{t.location}</span>
             </div>
           </div>
         ))}
