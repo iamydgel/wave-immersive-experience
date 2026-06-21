@@ -201,12 +201,13 @@ export default function TransferDemo() {
                 data-cursor="cta"
                 data-cursor-text="Valider"
               >
-                {status === 'idle' && 'Entrer le montant...'}
-                {status === 'typing' && 'Prêt à envoyer'}
-                {status === 'sending' && (
-                  <div ref={spinnerRef} className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                )}
-                {status === 'success' && 'Envoyé avec succès'}
+                <span className={status === 'idle' ? 'block' : 'hidden'}>Entrer le montant...</span>
+                <span className={status === 'typing' ? 'block' : 'hidden'}>Prêt à envoyer</span>
+                <div
+                  ref={spinnerRef}
+                  className={`h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin ${status === 'sending' ? 'block' : 'hidden'}`}
+                />
+                <span className={status === 'success' ? 'block' : 'hidden'}>Envoyé avec succès</span>
               </button>
             </div>
 
