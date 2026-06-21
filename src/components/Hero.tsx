@@ -218,7 +218,7 @@ export default function Hero({ isLoaded }: HeroProps) {
             data-cursor-text="Google"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white h-6 w-auto">
-              <path d="M3.25 1.58c-.14-.14-.25-.09-.25.11v20.62c0 .2.11.25.25.11l10.37-10.37L3.25 1.58z M18.66 9.49L14.38 12l4.28 2.51c.36.21.36.56 0 .77l-2.5 1.47-2.37-2.37 2.37-2.38 2.5 1.47c.36.22.36.57 0 .78z M3.97.83l12.75 7.5-2.34 2.34L3.97.83z M14.38 13.33l2.34 2.34-12.75 7.5 10.41-9.84z"/>
+              <path d="M3 20.28V3.72c0-.78.85-1.25 1.5-.8L18.66 11.2c.45.31.45 1.09 0 1.4L4.5 21.08c-.65.45-1.5-.02-1.5-.8z" />
             </svg>
             <div className="text-left leading-none">
               <div className="text-[10px] text-white/60">DISPONIBLE SUR</div>
