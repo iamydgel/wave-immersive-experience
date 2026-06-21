@@ -127,7 +127,7 @@ export default function Hero({ isLoaded }: HeroProps) {
           scrub: true,
         },
       });
-    }, containerRef);
+    }, sectionRef);
 
     return () => ctx.revert();
   }, [isLoaded]);
