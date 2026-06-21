@@ -171,16 +171,21 @@ html.lenis body {
   }
 }
 
-/* Cursor styling states */
+/* Cursor styling states and performance optimizations */
+.cursor {
+  scale: 1;
+  transition: scale 0.2s var(--ease-emerge), background-color 0.2s, border-color 0.2s;
+}
+
 .cursor[data-state="link"] {
-  transform: scale(2) !important;
+  scale: 2;
   background-color: transparent !important;
   mix-blend-mode: difference;
   border-color: var(--c-foam);
 }
 
 .cursor[data-state="cta"] {
-  transform: scale(2.8) !important;
+  scale: 2.8;
   background-color: var(--c-foam) !important;
   border-color: var(--c-foam) !important;
 }
@@ -190,13 +195,14 @@ html.lenis body {
 }
 
 .cursor[data-state="card"] {
-  transform: scale(0.66) !important;
+  scale: 0.66;
   background-color: transparent !important;
   border-color: var(--c-wave-blue);
 }
 
 .cursor.clicking {
-  transform: scale(0.7) !important;
-  transition: transform 80ms cubic-bezier(0.4, 0, 1, 1) !important;
+  scale: 0.7 !important;
+  transition: scale 80ms cubic-bezier(0.4, 0, 1, 1) !important;
 }
+
 

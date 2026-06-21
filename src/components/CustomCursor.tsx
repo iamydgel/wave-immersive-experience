@@ -16,31 +16,23 @@ export default function CustomCursor() {
     const textEl = textRef.current;
     if (!cursorEl) return;
 
-    const mouse = { x: 0, y: 0 };
-    const cursor = { x: 0, y: 0 };
-    const LERP = 0.12;
+    // Masquer le curseur système par défaut sur le document
+    document.documentElement.style.cursor = 'none';
+
+    // Position initiale hors de l'écran pour éviter le flash en haut à gauche
+    gsap.set(cursorEl, { x: -100, y: -100 });
+
+    // Initialisation de quickTo pour un déplacement ultra-performant et fluide (lerp matériel)
+    const xTo = gsap.quickTo(cursorEl, 'x', { duration: 0.15, ease: 'power3.out' });
+    const yTo = gsap.quickTo(cursorEl, 'y', { duration: 0.15, ease: 'power3.out' });
 
     const onMouseMove = (e: MouseEvent) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      // Ajustement pour centrer le curseur (12px = rayon du curseur)
+      xTo(e.clientX - 12);
+      yTo(e.clientY - 12);
     };
 
     window.addEventListener('mousemove', onMouseMove);
-
-    // Boucle d'animation avec Lerp
-    let animationFrameId: number;
-    const updateCursor = () => {
-      cursor.x += (mouse.x - cursor.x) * LERP;
-      cursor.y += (mouse.y - cursor.y) * LERP;
-
-      gsap.set(cursorEl, {
-        x: cursor.x - 12,
-        y: cursor.y - 12,
-      });
-
-      animationFrameId = requestAnimationFrame(updateCursor);
-    };
-    updateCursor();
 
     // Gestion des états survolés via data-cursor
     const onMouseEnter = (e: Event) => {
@@ -67,14 +59,15 @@ export default function CustomCursor() {
       cursorEl.classList.remove('clicking');
     };
 
-    // Attacher des écouteurs globaux pour le clic
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mouseup', onMouseUp);
 
-    // Fonction pour attacher/détacher les écouteurs sur les éléments data-cursor
+    // Attacher les écouteurs d'événements
     const setupListeners = () => {
       const elements = document.querySelectorAll('[data-cursor]');
       elements.forEach((el) => {
+        el.removeEventListener('mouseenter', onMouseEnter);
+        el.removeEventListener('mouseleave', onMouseLeave);
         el.addEventListener('mouseenter', onMouseEnter);
         el.addEventListener('mouseleave', onMouseLeave);
       });
@@ -82,37 +75,33 @@ export default function CustomCursor() {
 
     setupListeners();
 
-    // Observer pour gérer le contenu dynamique ajouté après coup
+    // Observer pour les éléments ajoutés dynamiquement au DOM
     const observer = new MutationObserver(() => {
       setupListeners();
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      document.documentElement.style.cursor = 'auto';
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mouseup', onMouseUp);
-      cancelAnimationFrame(animationFrameId);
       observer.disconnect();
     };
   }, []);
 
   return (
-    <>
-      <div
-        ref={cursorRef}
-        className="cursor pointer-events-none fixed top-0 left-0 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-wave-blue/80 transition-transform duration-200 ease-out will-change-transform"
-        style={{
-          transform: 'translate3d(0px, 0px, 0px) scale(1)',
-        }}
-      >
-        <span
-          ref={textRef}
-          className="pointer-events-none font-body text-[8px] font-bold text-deep-ocean opacity-0 transition-opacity duration-200"
-        />
-      </div>
-
-
-    </>
+    <div
+      ref={cursorRef}
+      className="cursor pointer-events-none fixed top-0 left-0 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-wave-blue/80 scale-100 will-change-transform"
+      style={{
+        transform: 'translate3d(-100px, -100px, 0px)',
+      }}
+    >
+      <span
+        ref={textRef}
+        className="pointer-events-none font-body text-[8px] font-bold text-deep-ocean opacity-0 transition-opacity duration-200"
+      />
+    </div>
   );
 }
